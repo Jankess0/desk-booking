@@ -1,1 +1,18 @@
-<p>login works!</p>
+<div style="text-align: center; margin-top: 50px;">
+  <h2>Zaloguj się do systemu rezerwacji biurek</h2>
+  
+  <form (ngSubmit)="onSubmit()" style="display: inline-block; text-align: left; border: 1px solid #ccc; padding: 20px;">
+    
+    <div style="margin-bottom: 15px;">
+      <label>Email:</label><br>
+      <input type="email" name="email" [(ngModel)]="loginData.email" required style="width: 200px;">
+    </div>
+    
+    <div style="margin-bottom: 15px;">
+      <label>Hasło:</label><br>
+      <input type="password" name="password" [(ngModel)]="loginData.password" required style="width: 200px;">
+    </div>
+    
+    <button type="submit" style="width: 100%; padding: 10px;">Zaloguj</button>
+  </form>
+</div>
