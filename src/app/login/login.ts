@@ -21,16 +21,10 @@ export class Login {
   onSubmit() {
     this.authService.login(this.loginData).subscribe({
       next: (token) => {
-        // Zapisujemy token, żeby potem dodawać go do kłódek (autoryzacji)
         localStorage.setItem('token', token);
         alert('Zalogowano pomyślnie!');
+        this.router.navigate(['/user']);
         
-        // Dla uproszczenia: jeśli mail ma "admin", idziemy do panelu admina
-        if (this.loginData.email.includes('admin')) {
-          this.router.navigate(['/admin']);
-        } else {
-          this.router.navigate(['/user']);
-        }
       },
       error: (err) => {
         alert('Błąd logowania. Sprawdź dane.');

@@ -1,1 +1,13 @@
-<p>user-panel works!</p>
+<div class="user-panel-header">
+  <h2>Panel Rezerwacji Biurek</h2>
+  
+  @if (isAdmin) {
+    <button (click)="goToAdminPanel()" class="admin-btn">
+      ⚙️ Przejdź do panelu admina
+    </button>
+  }
+</div>
+
+<div class="desks-container">
+  <p>Ładowanie biurek...</p>
+</div>
