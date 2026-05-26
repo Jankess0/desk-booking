@@ -10,6 +10,6 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   login(credentials: any) {
-    return this.http.post(`${this.apiUrl}/Login/login`, credentials, { responseType: 'text' }); 
+    return this.http.post(`${this.apiUrl}/Login/login`, credentials);
   }
 }

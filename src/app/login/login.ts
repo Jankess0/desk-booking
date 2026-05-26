@@ -20,15 +20,14 @@ export class Login {
 
   onSubmit() {
     this.authService.login(this.loginData).subscribe({
-      next: (token) => {
-        localStorage.setItem('token', token);
-        alert('Zalogowano pomyślnie!');
-        this.router.navigate(['/user']);
+      next: (response: any) => {
         
+        localStorage.setItem('token', response.token);
+        
+        this.router.navigate(['/user']);
       },
       error: (err) => {
-        alert('Błąd logowania. Sprawdź dane.');
-        console.error(err);
+        console.error('Błąd logowania', err);
       }
     });
   }

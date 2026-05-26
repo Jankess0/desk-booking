@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { DeskService, Desk } from './desk.service';
 
 @Component({
   selector: 'app-user-panel',
@@ -9,11 +10,13 @@ import { Router } from '@angular/router';
 })
 export class UserPanel implements OnInit {
   isAdmin: boolean = false;
+  desks: Desk[] = [];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private deskService: DeskService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.checkIfAdmin();
+    this.loadDesks()
   }
 
   checkIfAdmin() {
@@ -29,6 +32,19 @@ export class UserPanel implements OnInit {
         console.error('Błąd dekodowania tokena', e);
       }
     }
+  }
+
+loadDesks() {
+    this.deskService.getDesks().subscribe({
+      next: (data) => {
+        this.desks = data;
+        console.log('Biurka odebrane przez komponent:', data);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Nie udało się pobrać biurek', err);
+      }
+    });
   }
 
   goToAdminPanel() {

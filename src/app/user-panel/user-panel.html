@@ -1,13 +1,34 @@
 <div class="user-panel-header">
-  <h2>Panel Rezerwacji Biurek</h2>
+  <h2>Dostępne biurka</h2>
   
   @if (isAdmin) {
-    <button (click)="goToAdminPanel()" class="admin-btn">
-      ⚙️ Przejdź do panelu admina
-    </button>
+    <button (click)="goToAdminPanel()" class="admin-btn">⚙️ Przejdź do panelu admina</button>
   }
 </div>
 
-<div class="desks-container">
-  <p>Ładowanie biurek...</p>
+<div class="desk-grid">
+  @for (desk of desks; track desk.id) {
+    <div class="desk-card" 
+         [class.vip]="desk.deskType === 'Vip'"
+         [class.unavailable]="desk.status !== 'Available'">
+      
+      <h3>Biurko {{ desk.name }}</h3>
+      <p><strong>Pokój:</strong> {{ desk.roomNumber }}</p>
+      <p class="description">ℹ️ {{ desk.description }}</p>
+      
+      @if (desk.deskType === 'Vip') {
+        <span class="vip-badge">⭐ VIP</span>
+      }
+
+      <div class="status">
+        Status: <strong>{{ desk.status === 'Available' ? 'Dostępne' : 'Zajęte' }}</strong>
+      </div>
+
+      @if (desk.status === 'Available') {
+        <button class="reserve-btn">Zarezerwuj</button>
+      }
+    </div>
+  } @empty {
+    <p>Ładowanie biurek...</p>
+  }
 </div>
