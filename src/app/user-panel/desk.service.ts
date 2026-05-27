@@ -30,4 +30,19 @@ export class DeskService {
 
     return this.http.get<Desk[]>(this.apiUrl, { headers });
   }
+
+  reserveDesk(deskId: number): Observable<any> {
+    let token = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    
+    if (token) {
+      token = token.replace(/^"(.*)"$/, '$1').trim();
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    const url = `https://b3nympfxi9.eu-central-1.awsapprunner.com/api/Desk/${deskId}/checkin`;
+    
+    return this.http.post(url, {}, { headers });
+  }
+  
 }

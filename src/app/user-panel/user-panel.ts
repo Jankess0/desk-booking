@@ -11,6 +11,7 @@ import { DeskService, Desk } from './desk.service';
 export class UserPanel implements OnInit {
   isAdmin: boolean = false;
   desks: Desk[] = [];
+  reservedDeskMessage: string | null = null;
 
   constructor(private router: Router, private deskService: DeskService, private cdr: ChangeDetectorRef) {}
 
@@ -34,7 +35,7 @@ export class UserPanel implements OnInit {
     }
   }
 
-loadDesks() {
+  loadDesks() {
     this.deskService.getDesks().subscribe({
       next: (data) => {
         this.desks = data;
@@ -46,6 +47,28 @@ loadDesks() {
       }
     });
   }
+
+  reserveDesk(desk: Desk) {
+    this.deskService.reserveDesk(desk.id).subscribe({
+      next: () => {
+        this.reservedDeskMessage = `Masz zarezerwowany stolik nr ${desk.name}`;
+        
+        this.loadDesks();
+        
+        this.cdr.detectChanges();
+
+        setTimeout(() => {
+          this.reservedDeskMessage = null;
+          this.cdr.detectChanges();
+        }, 5000);
+      },
+      error: (err) => {
+        console.error('Błąd rezerwacji', err);
+        alert('Nie udało się zarezerwować biurka. Spróbuj ponownie.');
+      }
+    });
+  }
+  
 
   goToAdminPanel() {
     this.router.navigate(['/admin']);

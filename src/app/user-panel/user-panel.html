@@ -2,10 +2,14 @@
   <h2>Dostępne biurka</h2>
   
   @if (isAdmin) {
-    <button (click)="goToAdminPanel()" class="admin-btn">⚙️ Przejdź do panelu admina</button>
+    <button (click)="goToAdminPanel()" class="admin-btn">Przejdź do panelu admina</button>
   }
 </div>
-
+@if (reservedDeskMessage) {
+  <div class="success-banner">
+    ✅ {{ reservedDeskMessage }}
+  </div>
+}
 <div class="desk-grid">
   @for (desk of desks; track desk.id) {
     <div class="desk-card" 
@@ -14,10 +18,10 @@
       
       <h3>Biurko {{ desk.name }}</h3>
       <p><strong>Pokój:</strong> {{ desk.roomNumber }}</p>
-      <p class="description">ℹ️ {{ desk.description }}</p>
+      <p class="description">{{ desk.description }}</p>
       
       @if (desk.deskType === 'Vip') {
-        <span class="vip-badge">⭐ VIP</span>
+        <span class="vip-badge">VIP</span>
       }
 
       <div class="status">
@@ -25,7 +29,7 @@
       </div>
 
       @if (desk.status === 'Available') {
-        <button class="reserve-btn">Zarezerwuj</button>
+        <button class="reserve-btn" (click)="reserveDesk(desk)">Zarezerwuj</button>
       }
     </div>
   } @empty {
