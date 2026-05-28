@@ -12,12 +12,17 @@ export class UserPanel implements OnInit {
   isAdmin: boolean = false;
   desks: Desk[] = [];
   reservedDeskMessage: string | null = null;
+  currentUserId: string | null = null;
+  myBookedDeskIds: number[] = [];
 
   constructor(private router: Router, private deskService: DeskService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.checkIfAdmin();
     this.loadDesks()
+    if (this.currentUserId) {
+      this.loadMyBookings();
+    }
   }
 
   checkIfAdmin() {
@@ -29,6 +34,7 @@ export class UserPanel implements OnInit {
         const roleClaim = payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload.role;
         
         this.isAdmin = (roleClaim === 'Admin');
+        this.currentUserId = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier'] || payload.nameid;
       } catch (e) {
         console.error('Błąd dekodowania tokena', e);
       }
@@ -52,9 +58,8 @@ export class UserPanel implements OnInit {
     this.deskService.reserveDesk(desk.id).subscribe({
       next: () => {
         this.reservedDeskMessage = `Masz zarezerwowany stolik nr ${desk.name}`;
-        
         this.loadDesks();
-        
+        this.loadMyBookings();
         this.cdr.detectChanges();
 
         setTimeout(() => {
@@ -68,7 +73,38 @@ export class UserPanel implements OnInit {
       }
     });
   }
-  
+  loadMyBookings() {
+    if (!this.currentUserId) return;
+
+    this.deskService.getUserBookings(this.currentUserId).subscribe({
+      next: (bookings) => {
+        this.myBookedDeskIds = bookings.map(b => b.deskId || b.DeskId);
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Błąd pobierania rezerwacji użytkownika', err);
+      }
+    });
+  }
+  checkoutDesk(desk: Desk) {
+    this.deskService.checkoutDesk(desk.id).subscribe({
+      next: () => {
+        this.reservedDeskMessage = `Zwolniono biurko nr ${desk.name}`;
+        this.loadDesks();
+        this.loadMyBookings(); 
+        this.cdr.detectChanges();
+
+        setTimeout(() => {
+          this.reservedDeskMessage = null;
+          this.cdr.detectChanges();
+        }, 5000);
+      },
+      error: (err) => {
+        console.error('Błąd zwalniania biurka', err);
+        alert('Nie udało się zwolnić biurka.');
+      }
+    });
+  }
 
   goToAdminPanel() {
     this.router.navigate(['/admin']);

@@ -45,4 +45,29 @@ export class DeskService {
     return this.http.post(url, {}, { headers });
   }
   
+  checkoutDesk(deskId: number): Observable<any> {
+    let token = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    
+    if (token) {
+      token = token.replace(/^"(.*)"$/, '$1').trim();
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    const url = `https://b3nympfxi9.eu-central-1.awsapprunner.com/api/Desk/${deskId}/checkout`;
+    return this.http.post(url, {}, { headers });
+  }
+
+  getUserBookings(userId: string): Observable<any[]> {
+    let token = localStorage.getItem('token');
+    let headers = new HttpHeaders();
+    
+    if (token) {
+      token = token.replace(/^"(.*)"$/, '$1').trim();
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    const url = `https://b3nympfxi9.eu-central-1.awsapprunner.com/api/Booking/byUserId/${userId}`;
+    return this.http.get<any[]>(url, { headers });
+  }
 }

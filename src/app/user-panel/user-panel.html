@@ -24,12 +24,25 @@
         <span class="vip-badge">VIP</span>
       }
 
-      <div class="status">
-        Status: <strong>{{ desk.status === 'Available' ? 'Dostępne' : 'Zajęte' }}</strong>
+     <div class="status">
+        Status: <strong>
+          @if (desk.status === 'Available') { Dostępne }
+          @else if (desk.status.includes('Cleaning')) { W trakcie sprzątania }
+          @else { Zajęte }
+        </strong>
       </div>
 
-      @if (desk.status === 'Available') {
+      @if (desk.status.includes('Cleaning')) {
+        <button class="checkout-btn disabled cleaning-btn" disabled>🧹 {{ desk.status }}</button>
+      }
+      @else if (desk.status === 'Available') {
         <button class="reserve-btn" (click)="reserveDesk(desk)">Zarezerwuj</button>
+      } 
+      @else if (myBookedDeskIds.includes(desk.id)) {
+        <button class="checkout-btn" (click)="checkoutDesk(desk)">Zwolnij moje biurko</button>
+      } 
+      @else {
+        <button class="checkout-btn disabled" disabled>Zajęte</button>
       }
     </div>
   } @empty {
