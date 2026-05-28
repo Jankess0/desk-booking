@@ -1,9 +1,12 @@
 <div class="user-panel-header">
   <h2>Dostępne biurka</h2>
   
-  @if (isAdmin) {
-    <button (click)="goToAdminPanel()" class="admin-btn">Przejdź do panelu admina</button>
-  }
+  <div class="header-buttons">
+    @if (isAdmin) {
+      <button (click)="goToAdminPanel()" class="admin-btn">⚙️ Panel admina</button>
+    }
+    <button (click)="logout()" class="logout-btn">🚪 Wyloguj</button>
+  </div>
 </div>
 @if (reservedDeskMessage) {
   <div class="success-banner">

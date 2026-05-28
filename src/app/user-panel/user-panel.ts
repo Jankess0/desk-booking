@@ -106,6 +106,11 @@ export class UserPanel implements OnInit {
     });
   }
 
+  logout() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
+  }
+
   goToAdminPanel() {
     this.router.navigate(['/admin']);
   }

@@ -127,3 +127,22 @@
   border: 2px dashed #17a2b8;
   background: #f0f8ff;
 }
+
+.header-buttons {
+  display: flex;
+  gap: 10px; /* Odstęp między przyciskami */
+}
+
+.logout-btn {
+  padding: 10px 15px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.logout-btn:hover {
+  background: #c82333;
+}
