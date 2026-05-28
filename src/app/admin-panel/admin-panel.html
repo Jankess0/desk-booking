@@ -1,1 +1,76 @@
-<p>admin-panel works!</p>
+<div class="admin-header">
+  <h2>⚙️ Panel Administratora</h2>
+  <button class="back-btn" (click)="goBack()">⬅ Powrót do aplikacji</button>
+</div>
+
+<div class="admin-container">
+  
+  <div class="admin-section">
+    <h3>👥 Zarządzanie Użytkownikami</h3>
+
+    <div class="form-card">
+      <h4>Dodaj nowego użytkownika</h4>
+      <input type="text" placeholder="Imię" [(ngModel)]="newUser.firstName">
+      <input type="text" placeholder="Nazwisko" [(ngModel)]="newUser.lastName">
+      <input type="email" placeholder="Email" [(ngModel)]="newUser.email">
+      <input type="password" placeholder="Hasło" [(ngModel)]="newUser.password">
+      <button class="add-btn" (click)="addUser()">➕ Dodaj użytkownika</button>
+    </div>
+
+    <table class="data-table">
+      <tr>
+        <th>ID</th>
+        <th>Imię i Nazwisko</th>
+        <th>Email</th>
+        <th>Akcja</th>
+      </tr>
+      @for (user of users; track user.id) {
+        <tr>
+          <td>{{ user.id }}</td>
+          <td>{{ user.firstName }} {{ user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td><button class="delete-btn" (click)="deleteUser(user.id)">🗑️ Usuń</button></td>
+        </tr>
+      }
+    </table>
+  </div>
+
+  <div class="admin-section">
+    <h3>🪑 Zarządzanie Biurkami</h3>
+
+    <div class="form-card">
+      <h4>Dodaj nowe biurko</h4>
+      <input type="text" placeholder="Nazwa (np. B12)" [(ngModel)]="newDesk.name">
+      <input type="text" placeholder="Opis (np. Przy oknie)" [(ngModel)]="newDesk.description">
+      
+      <select [(ngModel)]="newDesk.deskType">
+        <option value="Standard">Standard</option>
+        <option value="Vip">VIP</option>
+      </select>
+
+      <select [(ngModel)]="newDesk.roomId">
+        @for (room of rooms; track room.id) {
+          <option [value]="room.id">Pokój: {{ room.roomNumber }} (Piętro: {{ room.floorNumber }})</option>
+        }
+      </select>
+
+      <button class="add-btn" (click)="addDesk()">➕ Dodaj biurko</button>
+    </div>
+
+    <table class="data-table">
+      <tr>
+        <th>Nazwa</th>
+        <th>Typ</th>
+        <th>Akcja</th>
+      </tr>
+      @for (desk of desks; track desk.id) {
+        <tr>
+          <td>{{ desk.name }} <small>({{ desk.description }})</small></td>
+          <td>{{ desk.deskType }}</td>
+          <td><button class="delete-btn" (click)="deleteDesk(desk.id)">🗑️ Usuń</button></td>
+        </tr>
+      }
+    </table>
+  </div>
+
+</div>
